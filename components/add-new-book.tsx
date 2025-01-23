@@ -24,7 +24,8 @@ const AddNewBook = () => {
 
   const { toast } = useToast();
 
-  const user = useUserStore((state) => state.user);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const user = useUserStore((state: any) => state.user);
 
   const addNewBook = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

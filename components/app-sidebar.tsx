@@ -14,7 +14,8 @@ import { useUserStore } from "@/hooks/store/use-store";
 import Link from "next/link";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const user = useUserStore((state) => state.user);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const user = useUserStore((state: any) => state.user);
 
   const navMainWithoutFilter = [
     {

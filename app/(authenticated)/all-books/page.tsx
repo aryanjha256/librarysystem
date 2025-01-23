@@ -32,16 +32,16 @@ export type Book = Prisma.BookGetPayload<{
   };
 }>;
 
-export const convertToImageUrl = (array: { [key: number]: number }) => {
-  const uint8Array = new Uint8Array(Object.values(array));
-  const blob = new Blob([uint8Array], { type: "image/*" });
-  return URL.createObjectURL(blob);
-};
-
 const AddBook = () => {
   const [books, setBooks] = useState<Book[]>([]);
 
   const { toast } = useToast();
+
+  const convertToImageUrl = (array: { [key: number]: number }) => {
+    const uint8Array = new Uint8Array(Object.values(array));
+    const blob = new Blob([uint8Array], { type: "image/*" });
+    return URL.createObjectURL(blob);
+  };
 
   const getBooks = async () => {
     const res = await fetch("/api/book");

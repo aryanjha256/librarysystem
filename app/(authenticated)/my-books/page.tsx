@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import React, { useEffect, useState } from "react";
-import { Book, convertToImageUrl } from "../all-books/page";
+import { Book } from "../all-books/page";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import {
@@ -31,6 +31,12 @@ const MyBooks = () => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
   const { toast } = useToast();
+
+  const convertToImageUrl = (array: { [key: number]: number }) => {
+    const uint8Array = new Uint8Array(Object.values(array));
+    const blob = new Blob([uint8Array], { type: "image/*" });
+    return URL.createObjectURL(blob);
+  };
 
   const myBooks = async () => {
     const res = await fetch("/api/mybook");
