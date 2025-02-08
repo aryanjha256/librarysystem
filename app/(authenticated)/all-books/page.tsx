@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import AddNewBook from "@/components/add-new-book";
 import { Prisma } from "@prisma/client";
@@ -36,12 +35,6 @@ const AddBook = () => {
   const [books, setBooks] = useState<Book[]>([]);
 
   const { toast } = useToast();
-
-  const convertToImageUrl = (array: { [key: number]: number }) => {
-    const uint8Array = new Uint8Array(Object.values(array));
-    const blob = new Blob([uint8Array], { type: "image/*" });
-    return URL.createObjectURL(blob);
-  };
 
   const getBooks = async () => {
     const res = await fetch("/api/book");
@@ -115,7 +108,7 @@ const AddBook = () => {
           }
         />
       </div>
-      {/* List of Users */}
+      {/* List of Books */}
       <Table>
         <TableCaption>A list of books.</TableCaption>
         <TableHeader>
@@ -132,11 +125,12 @@ const AddBook = () => {
             <TableRow key={book.id}>
               <TableCell>
                 <Image
-                  src={convertToImageUrl(book.image)}
+                  src={book.image}
                   alt={book.title}
-                  width={32}
-                  height={32}
-                  className="w-16 h-16 rounded-md object-cover"
+                  width={1024}
+                  height={1024}
+                  quality={100}
+                  className="w-16 h-24 rounded-md object-cover"
                 />
               </TableCell>
               <TableCell className="font-medium">{book.title}</TableCell>

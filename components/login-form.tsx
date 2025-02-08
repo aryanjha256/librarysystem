@@ -32,9 +32,13 @@ export function LoginForm({
 
     if (res.ok) {
       const data = await res.json();
-      const { username, id, role } = data?.data;
+      const { username, id, role, fullName } = data?.data;
       router.push("/my-books");
-      useUserStore.setState({ user: { username, id, role } });
+      useUserStore.setState({ user: { username, id, role, fullName } });
+      sessionStorage.setItem(
+        "userData",
+        JSON.stringify({ username, id, role, fullName })
+      );
     } else {
       alert("Invalid credentials");
     }

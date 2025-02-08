@@ -20,18 +20,16 @@ const AddNewBook = () => {
   const [description, setDescription] = useState("");
   const [genre, setGenre] = useState("");
   const [image, setImage] = useState<File | null>(null);
-  const [data, setData] = useState<File | null>(null);
 
   const { toast } = useToast();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const user = useUserStore((state: any) => state.user);
+  const user = useUserStore((state) => state.user);
 
   const addNewBook = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!image || !data) {
+    if (!image) {
       toast({
-        title: "Please upload image and data",
+        title: "Please upload a cover image",
         description: "Please try again",
         variant: "destructive",
       });
@@ -43,7 +41,6 @@ const AddNewBook = () => {
     formData.append("description", description);
     formData.append("genre", genre);
     formData.append("image", image);
-    formData.append("data", data);
     const res = await fetch("/api/book", {
       method: "POST",
       body: formData,
@@ -120,25 +117,14 @@ const AddNewBook = () => {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="image">Image</Label>
+                <Label htmlFor="image">Cover Image</Label>
                 <Input
                   id="image"
                   type="file"
                   accept="image/*"
-                  placeholder="Book Image"
+                  placeholder="Cover Image"
                   required
                   onChange={(e) => setImage(e.target.files?.[0] || null)}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="data">Data</Label>
-                <Input
-                  id="data"
-                  type="file"
-                  accept="application/pdf"
-                  placeholder="Book Data"
-                  required
-                  onChange={(e) => setData(e.target.files?.[0] || null)}
                 />
               </div>
               <Button type="submit" className="w-full">

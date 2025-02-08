@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 export async function GET() {
   const books = await prisma.user.findUnique({
     where: {
-      id: "67911267bc50c5ac2cdb71e6",
+      id: "679f6100ef4354f33c49d640",
     },
     include: {
       userBooks: {
@@ -31,7 +31,7 @@ export async function DELETE(request: Request) {
   const books = await prisma.userBook.delete({
     where: {
       userId_bookId: {
-        userId: "67911267bc50c5ac2cdb71e6",
+        userId: "679f6100ef4354f33c49d640",
         bookId: id,
       },
     },

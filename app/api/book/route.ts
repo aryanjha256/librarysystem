@@ -1,3 +1,4 @@
+import { IMGBB_API_KEY } from "@/const";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -11,13 +12,11 @@ export async function POST(request: NextRequest) {
   const description = formData.get("description") as string;
   const genre = formData.get("genre") as string;
   const image = formData.get("image") as File;
-  const data = formData.get("data") as File;
 
-  if (!title || !author || !description || !genre || !image || !data) {
+  if (!title || !author || !description || !genre || !image) {
     return NextResponse.json(
       {
-        message:
-          "Title, author, description, genre, image, and data are required",
+        message: "Title, author, description, genre, and image are required",
       },
       {
         status: 400,
@@ -25,14 +24,25 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  const imageBody = new FormData();
+  imageBody.append("image", image);
+  const imageUploadResponse = await fetch(
+    `https://api.imgbb.com/1/upload?expiration=600&key=${IMGBB_API_KEY}`,
+    {
+      method: "POST",
+      body: imageBody,
+    }
+  );
+  const result = await imageUploadResponse.json();
+  console.log(result);
+
   const book = await prisma.book.create({
     data: {
       title,
       author,
       description,
       genre,
-      image: Buffer.from(await image.arrayBuffer()),
-      data: Buffer.from(await data.arrayBuffer()),
+      image: result.data.url ?? "",
     },
   });
 
@@ -48,7 +58,6 @@ export async function GET() {
       description: true,
       genre: true,
       image: true,
-      data: true,
     },
   });
 
@@ -88,7 +97,7 @@ export async function PUT(request: NextRequest) {
   const { id } = await request.json();
   const userBooks = await prisma.userBook.findMany({
     where: {
-      userId: "67911267bc50c5ac2cdb71e6",
+      userId: "679f6100ef4354f33c49d640",
     },
   });
 

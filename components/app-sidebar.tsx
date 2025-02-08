@@ -4,7 +4,6 @@ import * as React from "react";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -12,10 +11,11 @@ import {
 } from "@/components/ui/sidebar";
 import { useUserStore } from "@/hooks/store/use-store";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const user = useUserStore((state: any) => state.user);
+  const user = useUserStore((state) => state.user);
+  const path = usePathname();
 
   const navMainWithoutFilter = [
     {
@@ -39,7 +39,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const navMain = navMainWithoutFilter.filter((item) =>
     item.role.includes(user?.role || "READER")
   );
-  console.log(user);
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -47,33 +47,27 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           Library
         </div>
         <div className="flex flex-col items-center justify-center">
-          {user?.username
-            ? `Welcome ${user?.username}`
-            : "Please login to access your account"}
-          {user?.role}
+          <span>
+            {user?.username
+              ? `Welcome ${user?.fullName}`
+              : "Please login to access your account"}
+          </span>
+          <span>{user?.role}</span>
         </div>
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
-        {navMain.map((item) => (
-          <SidebarMenu key={item.title}>
+        <SidebarMenu>
+          {navMain.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild isActive={item.isActive}>
+              <SidebarMenuButton asChild isActive={path === item.url}>
                 <Link href={item.url}>{item.title}</Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
-          </SidebarMenu>
-        ))}
+          ))}
+        </SidebarMenu>
       </SidebarContent>
       {/* <SidebarRail /> */}
-      <SidebarFooter>
-        <div className="flex flex-col items-center justify-center">
-          {user?.username
-            ? `Welcome ${user?.username}`
-            : "Please login to access your account"}
-          {user?.role}
-        </div>
-      </SidebarFooter>
     </Sidebar>
   );
 }

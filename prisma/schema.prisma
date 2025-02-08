@@ -30,8 +30,7 @@ model Book {
   author      String
   description String
   genre       String     @default("NOVEL")
-  image       Bytes
-  data        Bytes
+  image       String
   userBooks   UserBook[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
