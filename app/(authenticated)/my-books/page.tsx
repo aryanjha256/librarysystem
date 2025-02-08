@@ -32,12 +32,6 @@ const MyBooks = () => {
 
   const { toast } = useToast();
 
-  const convertToImageUrl = (array: { [key: number]: number }) => {
-    const uint8Array = new Uint8Array(Object.values(array));
-    const blob = new Blob([uint8Array], { type: "image/*" });
-    return URL.createObjectURL(blob);
-  };
-
   const myBooks = async () => {
     const res = await fetch("/api/mybook");
     const books: Book[] = await res.json();
@@ -127,7 +121,7 @@ const MyBooks = () => {
               <TableRow key={book.id}>
                 <TableCell>
                   <Image
-                    src={convertToImageUrl(book.image)}
+                    src={book.image}
                     alt={book.title}
                     width={32}
                     height={32}
@@ -165,7 +159,7 @@ const MyBooks = () => {
               </CardHeader>
               <CardContent>
                 <Image
-                  src={convertToImageUrl(book.image)}
+                  src={book.image}
                   alt={book.title}
                   width={32}
                   height={32}
