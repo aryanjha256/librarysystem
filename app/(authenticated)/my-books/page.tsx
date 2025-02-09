@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Book } from "../all-books/page";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
@@ -24,20 +24,25 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useUserStore } from "@/hooks/store/use-store";
 
 const MyBooks = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [filteredBooks, setFilteredBooks] = useState<Book[]>([]);
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+  const user = useUserStore((state) => state.user);
 
   const { toast } = useToast();
 
-  const myBooks = async () => {
-    const res = await fetch("/api/mybook");
+  const myBooks = useCallback(async () => {
+    if (user === null) {
+      return;
+    }
+    const res = await fetch("/api/mybook?userId=" + user.id);
     const books: Book[] = await res.json();
     setBooks(books);
     setFilteredBooks(books);
-  };
+  }, [user]);
 
   const removeFromMyBooks = async (id: string) => {
     const res = await fetch(`/api/mybook`, {
@@ -71,7 +76,7 @@ const MyBooks = () => {
 
   useEffect(() => {
     myBooks();
-  }, []);
+  }, [myBooks]);
 
   return (
     <div className="flex flex-col gap-4">

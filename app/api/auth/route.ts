@@ -54,13 +54,13 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const token = jwt.sign({ username: "admin", userId: 1 }, JWT_SECRET, {
-    expiresIn: "1d", // Token expires in 1 day
+  const token = jwt.sign({ username: "admin", userId: user.id }, JWT_SECRET, {
+    expiresIn: "1d",
   });
 
   const cookie = serialize("library-system-token", token, {
     httpOnly: true,
-    maxAge: 60 * 60 * 24, // 1 day
+    maxAge: 60 * 60 * 24,
     path: "/",
   });
 

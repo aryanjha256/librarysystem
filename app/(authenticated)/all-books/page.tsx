@@ -18,6 +18,7 @@ import Image from "next/image";
 import ViewBook from "@/components/view-book";
 import { Plus, Trash } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { useUserStore } from "@/hooks/store/use-store";
 
 export type Book = Prisma.BookGetPayload<{
   select: {
@@ -33,6 +34,7 @@ export type Book = Prisma.BookGetPayload<{
 
 const AddBook = () => {
   const [books, setBooks] = useState<Book[]>([]);
+  const user = useUserStore((state) => state.user);
 
   const { toast } = useToast();
 
@@ -64,10 +66,13 @@ const AddBook = () => {
   };
 
   const addToMyBooks = async (id: string) => {
+    if (user === null) {
+      return;
+    }
     const res = await fetch("/api/book", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, addToMyBooks: true }),
+      body: JSON.stringify({ id, userId: user.id }),
     });
 
     if (res.ok) {

@@ -1,12 +1,20 @@
 import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get("userId");
+  if (!userId) {
+    return NextResponse.json(
+      { message: "User ID is required" },
+      { status: 400 }
+    );
+  }
   const books = await prisma.user.findUnique({
     where: {
-      id: "679f6100ef4354f33c49d640",
+      id: userId,
     },
     include: {
       userBooks: {
@@ -26,12 +34,12 @@ export async function GET() {
 }
 
 export async function DELETE(request: Request) {
-  const { id } = await request.json();
+  const { id, userId } = await request.json();
 
   const books = await prisma.userBook.delete({
     where: {
       userId_bookId: {
-        userId: "679f6100ef4354f33c49d640",
+        userId: userId,
         bookId: id,
       },
     },

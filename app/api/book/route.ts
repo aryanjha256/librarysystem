@@ -34,7 +34,6 @@ export async function POST(request: NextRequest) {
     }
   );
   const result = await imageUploadResponse.json();
-  console.log(result);
 
   const book = await prisma.book.create({
     data: {
@@ -94,10 +93,10 @@ export async function DELETE(request: NextRequest) {
 }
 
 export async function PUT(request: NextRequest) {
-  const { id } = await request.json();
+  const { id, userId } = await request.json();
   const userBooks = await prisma.userBook.findMany({
     where: {
-      userId: "679f6100ef4354f33c49d640",
+      userId: userId,
     },
   });
 
@@ -120,7 +119,7 @@ export async function PUT(request: NextRequest) {
   if (bookIndex === -1) {
     await prisma.userBook.create({
       data: {
-        userId: "67911267bc50c5ac2cdb71e6",
+        userId: userId,
         bookId: id,
       },
     });
