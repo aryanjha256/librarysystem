@@ -38,7 +38,7 @@ const ViewBook = ({ book }: { book: Book }) => {
             width={1024}
             height={1024}
             quality={100}
-            className="w-full h-full rounded-md object-cover"
+            className="w-full h-full rounded-md max-h-96 object-contain"
           />
           <DialogFooter>{book.description}</DialogFooter>
         </DialogContent>

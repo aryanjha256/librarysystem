@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       data: {
         username: username.toString(),
         password: hashedPassword,
-        fullName: "John Doe",
+        fullName: "Admin",
         role: "ADMIN",
       },
     });

@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
-  const { username, password, role } = await request.json();
+  const { username, password, role, fullname } = await request.json();
 
   if (!username || !password) {
     return NextResponse.json(
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     data: {
       username,
       password: hashedPassword,
-      fullName: "John Doe",
+      fullName: fullname,
       role: role ? role : "READER",
     },
   });

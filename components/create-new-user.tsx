@@ -27,6 +27,7 @@ const CreateNewUser = ({ getUsers }: { getUsers: () => void }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("");
+  const [fullname, setFullname] = useState("");
 
   const { toast } = useToast();
 
@@ -43,7 +44,7 @@ const CreateNewUser = ({ getUsers }: { getUsers: () => void }) => {
     const res = await fetch("/api/user", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password, role }),
+      body: JSON.stringify({ username, password, role, fullname }),
     });
 
     if (res.ok) {
@@ -77,6 +78,16 @@ const CreateNewUser = ({ getUsers }: { getUsers: () => void }) => {
           </DialogHeader>
           <form onSubmit={createNewUser}>
             <div className="flex flex-col gap-6">
+              <div className="grid gap-2">
+                <Label htmlFor="fullname">Full Name</Label>
+                <Input
+                  id="fullname"
+                  type="text"
+                  placeholder="Full Name"
+                  required
+                  onChange={(e) => setFullname(e.target.value)}
+                />
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="username">Username</Label>
                 <Input
