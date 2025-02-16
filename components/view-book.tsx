@@ -7,7 +7,6 @@ import {
   DialogContent,
   DialogTitle,
   DialogDescription,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { Eye } from "lucide-react";
 import { Book } from "@/app/(authenticated)/all-books/page";
@@ -40,7 +39,7 @@ const ViewBook = ({ book }: { book: Book }) => {
             quality={100}
             className="w-full h-full rounded-md max-h-96 object-contain"
           />
-          <DialogFooter>{book.description}</DialogFooter>
+          <span>{book.description}</span>
         </DialogContent>
       </Dialog>
     </div>

@@ -45,12 +45,15 @@ const MyBooks = () => {
   }, [user]);
 
   const removeFromMyBooks = async (id: string) => {
+    if (user === null) {
+      return;
+    }
     const res = await fetch(`/api/mybook`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ id, userId: user.id }),
     });
 
     if (res.ok) {
