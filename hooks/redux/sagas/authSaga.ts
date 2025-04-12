@@ -1,6 +1,7 @@
 // redux/sagas/authSaga.js
 import { call, takeLatest } from "redux-saga/effects";
-import { useUserStore } from "@/hooks/store/use-store";
+import { useUserStore as userStore } from "@/hooks/store/use-store";
+import { Role } from "@prisma/client";
 
 interface LoginPayload {
   username: string;
@@ -10,6 +11,15 @@ interface LoginPayload {
 interface LoginAction {
   type: "LOGIN_REQUEST";
   payload: LoginPayload;
+}
+
+interface ApiResponse {
+  data: {
+    username: string;
+    id: string;
+    role: Role;
+    fullName: string;
+  };
 }
 
 function* loginSaga(action: LoginAction) {
@@ -22,11 +32,11 @@ function* loginSaga(action: LoginAction) {
 
     if (!res.ok) throw new Error("Invalid credentials");
 
-    const data: unknown = yield res.json();
+    const data: ApiResponse = yield res.json();
     const { username, id, role, fullName } = data?.data;
 
     // Update Zustand store
-    useUserStore.getState().setUser({ username, id, role, fullName });
+    userStore.getState().setUser({ username, id, role, fullName });
 
     // Save in sessionStorage
     sessionStorage.setItem(
