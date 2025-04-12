@@ -11,8 +11,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SyntheticEvent, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useUserStore } from "@/hooks/store/use-store";
+// import { useRouter } from "next/navigation";
+// import { useUserStore } from "@/hooks/store/use-store";
+import { useDispatch } from "react-redux";
 
 export function LoginForm({
   className,
@@ -20,28 +21,34 @@ export function LoginForm({
 }: React.ComponentPropsWithoutRef<"div">) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
+  // const router = useRouter();
+
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    const res = await fetch("/api/auth", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
+    // const res = await fetch("/api/auth", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ username, password }),
+    // });
 
-    if (res.ok) {
-      const data = await res.json();
-      const { username, id, role, fullName } = data?.data;
-      router.push("/my-books");
-      useUserStore.setState({ user: { username, id, role, fullName } });
-      sessionStorage.setItem(
-        "userData",
-        JSON.stringify({ username, id, role, fullName })
-      );
-    } else {
-      alert("Invalid credentials");
-    }
+    // if (res.ok) {
+    //   const data = await res.json();
+    //   const { username, id, role, fullName } = data?.data;
+    //   router.push("/my-books");
+    //   useUserStore.setState({ user: { username, id, role, fullName } });
+    //   sessionStorage.setItem(
+    //     "userData",
+    //     JSON.stringify({ username, id, role, fullName })
+    //   );
+    // } else {
+    //   alert("Invalid credentials");
+    // }
+    dispatch({
+      type: "LOGIN_REQUEST",
+      payload: { username, password },
+    });
   };
 
   return (
