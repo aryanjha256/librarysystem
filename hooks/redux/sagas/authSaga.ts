@@ -1,6 +1,5 @@
 // redux/sagas/authSaga.js
 import { call, takeLatest } from "redux-saga/effects";
-import Router from "next/router";
 import { useUserStore } from "@/hooks/store/use-store";
 
 interface LoginPayload {
@@ -36,7 +35,7 @@ function* loginSaga(action: LoginAction) {
     );
 
     // Navigate
-    yield call(Router.push, "/my-books");
+    window.location.href = "/my-books";
   } catch (error) {
     console.error(error);
     alert("Login failed");
